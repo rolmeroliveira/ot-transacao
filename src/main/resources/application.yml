@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        username: root
+        url: ${BANCO_DADOS:jdbc:mysql://localhost:3306/transacoes}
+        testWhileIdle: 'true'
+        validationQuery: SELECT 1
+        password: root
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+        hibernate:
+            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+            ddl-auto: update
+        show-sql: 'true'
+
+    kafka:
+        consumer:
+            bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
+            group-id: ${KAFKA_CONSUMER_GROUP_ID:ot-transacoes}
+            auto-offset-reset: ${KAFKA_AUTO-OFFSET-RESET:latest}
+            # para o conumer já implemtado nessa aplicacao
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            # Para um possível producer que eu vou implementar somente para estudo
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        topic:
+            transactions: ${KAFKA_TOPIC:transacoes}
